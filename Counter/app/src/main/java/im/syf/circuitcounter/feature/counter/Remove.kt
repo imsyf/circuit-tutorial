@@ -1,4 +1,4 @@
-package im.syf.circuitcounter.ui.component
+package im.syf.circuitcounter.feature.counter
 
 import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.materialPath

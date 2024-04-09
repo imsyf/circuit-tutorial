@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import im.syf.circuitcounter.ui.component.Counter
+import com.slack.circuit.foundation.Circuit
+import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.foundation.CircuitContent
+import im.syf.circuitcounter.feature.counter.Counter
+import im.syf.circuitcounter.feature.counter.CounterPresenter
+import im.syf.circuitcounter.feature.counter.CounterScreen
 import im.syf.circuitcounter.ui.theme.CounterTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,11 +39,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun CounterApp() {
-    var count by remember { mutableIntStateOf(0) }
+    val circuit = Circuit.Builder()
+        .addPresenter<CounterScreen, CounterScreen.State>(CounterPresenter())
+        .addUi<CounterScreen, CounterScreen.State> { state, modifier -> Counter(state, modifier) }
+        .build()
 
-    Counter(
-        count = count,
-        onIncrement = { count++ },
-        onDecrement = { count-- },
-    )
+    CircuitCompositionLocals(circuit = circuit) {
+        CircuitContent(screen = CounterScreen)
+    }
 }
